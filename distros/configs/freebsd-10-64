@@ -49,8 +49,10 @@ env ASSUME_ALWAYS_YES=YES pkg install -y ca_root_nss
 #cloud-init required for ssh key and random seed injection
 env ASSUME_ALWAYS_YES=YES pkg install -y e2fsprogs py27-cloud-init
 
-#TODO without explicit load, getting Shared object "libpython2.7.so.1" not found, required by "python2.7"
-echo 'command="env LD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/cloud-init"' > /etc/defaults/cloud-init
+#update LD_LIBRARY_PATH to include /usr/local/lib
+/etc/rc.d/ldconfig restart
+
+echo 'command="/usr/local/bin/cloud-init"' > /etc/defaults/cloud-init
 
 #Technically present right now but ineffective because it was for bsd-cloudinit not cloud-init
 #remove in future releases
